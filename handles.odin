@@ -32,8 +32,8 @@
 package handles
 
 Handle :: struct {
-	idx: u32,					//the array index
-	gen: u32 					//the generation of the array slot
+	idx: u32,
+	gen: u32
 }
 
 HANDLE_NONE :: Handle {}
