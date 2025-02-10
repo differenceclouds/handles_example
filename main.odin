@@ -31,7 +31,7 @@ regen_entities :: proc(entities: ^Handle_Array($T, $HT)) {
 
 
 main :: proc() {
-	windowsize = {640, 480}
+	windowsize = {1024, 768}
 	rl.SetConfigFlags({.WINDOW_RESIZABLE})
 	rl.InitWindow(i32(windowsize.x), i32(windowsize.y), "handle this")
 
@@ -45,7 +45,6 @@ main :: proc() {
 	for !rl.WindowShouldClose() {
 
 		mouse_position := rl.GetMousePosition()
-		// debug_message[0] = fmt.ctprint(mouse_position)
 
 		if rl.IsWindowResized() {
 			windowsize = {f32(rl.GetScreenWidth()), f32(rl.GetScreenHeight())}
@@ -55,8 +54,6 @@ main :: proc() {
 
 		rl.BeginDrawing()
 			rl.ClearBackground(0)
-
-
 
 			ee := ha_make_iter(entities)
 			size: [2]f32 = {30, 15}
