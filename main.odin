@@ -40,6 +40,7 @@ main :: proc() {
 	regen_entities(&entities)
 
 	selected_handle: EntityHandle
+	connecting: bool
 
 	for !rl.WindowShouldClose() {
 
@@ -50,34 +51,36 @@ main :: proc() {
 			windowsize = {f32(rl.GetScreenWidth()), f32(rl.GetScreenHeight())}
 		}
 
-
+		on_entity: bool
 
 		rl.BeginDrawing()
 			rl.ClearBackground(0)
 
-			on_entity: bool
+
 
 			ee := ha_make_iter(entities)
 			size: [2]f32 = {30, 15}
 			for e in ha_iter_ptr(&ee) {
 				p := e.position
 				color := e.color
-				if mouse_position.x >= p.x && mouse_position.x < p.x + size.x &&
-				mouse_position.y >= p.y && mouse_position.y < p.y + size.y {
+				rl.DrawRectangleV(p - 1, size + 2, rl.BLACK)
+
+				if !on_entity && mouse_position.x >= p.x && mouse_position.x <= p.x + size.x + 2 &&
+				mouse_position.y >= p.y && mouse_position.y <= p.y + size.y + 2 {
 					on_entity = true
-					rl.DrawRectangleV(p - 2, size + 4, rl.RED)
+					rl.DrawRectangleV(p - 2, size + 4, rl.BLUE)
 					if rl.IsMouseButtonPressed(.LEFT) {
 
 						if selected_handle == {} {
 							selected_handle = e.handle
 							e.connected_to = {}
-						} else {
+						} else if selected_handle != e.handle {
 							selected_entity := ha_get_ptr(entities, selected_handle)
 							selected_entity.connected_to = e.handle
 							selected_handle = {}
+							connecting = false
 						}
-					}
-					if rl.IsMouseButtonPressed(.RIGHT) {
+					} else if !connecting && rl.IsMouseButtonPressed(.RIGHT) {
 						ha_remove(&entities, e.handle)
 					}
 				}
@@ -90,10 +93,11 @@ main :: proc() {
 					rl.DrawCircleV(connected_to.position, 4, rl.RED)
 				} else if selected_handle == e.handle {
 					rl.DrawLineV(p + size, mouse_position, rl.GREEN)
+					connecting = true
 				}
 			}
 
-			if !on_entity && rl.IsMouseButtonPressed(.LEFT) {
+			if !on_entity && !connecting && rl.IsMouseButtonPressed(.LEFT) {
 				ha_add(&entities, Entity{
 					position = (mouse_position - 15),
 					color = rl.WHITE
@@ -102,6 +106,8 @@ main :: proc() {
 
 			if rl.IsKeyPressed(.R) {
 				regen_entities(&entities)
+				connecting = false
+				selected_handle = {}
 			}
 
 
