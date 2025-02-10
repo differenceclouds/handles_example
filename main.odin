@@ -31,7 +31,7 @@ regen_entities :: proc(entities: ^Handle_Array($T, $HT)) {
 
 
 main :: proc() {
-	windowsize = {1024, 768}
+	windowsize = {800, 600}
 	rl.SetConfigFlags({.WINDOW_RESIZABLE})
 	rl.InitWindow(i32(windowsize.x), i32(windowsize.y), "handle this")
 
@@ -100,6 +100,9 @@ main :: proc() {
 					position = (mouse_position - 15),
 					color = rl.WHITE
 				})
+			} else if !on_entity && connecting && rl.IsMouseButtonPressed(.LEFT) {
+				selected_handle = {}
+				connecting = false
 			}
 
 			if rl.IsKeyPressed(.R) {
