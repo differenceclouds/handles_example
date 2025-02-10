@@ -16,25 +16,30 @@ Entity :: struct {
 windowsize : [2]f32
 
 
+regen_entities :: proc(entities: ^Handle_Array($T, $HT)) {
+	ha_clear(entities)
+	for i := 0; i < 50; i += 1 {
+		x := rand.float32() * (windowsize.x - 30)
+		y := rand.float32() * (windowsize.y - 30)
+		ha_add(entities, Entity{
+			position = {x, y},
+			color = rl.WHITE
+		})
+	}
+}
+
+
+
 main :: proc() {
 	windowsize = {640, 480}
 	rl.SetConfigFlags({.WINDOW_RESIZABLE})
 	rl.InitWindow(i32(windowsize.x), i32(windowsize.y), "handle this")
 
-
 	entities: Handle_Array(Entity, EntityHandle)
 
-	for i := 0; i < 50; i += 1 {
-		x := rand.float32() * (windowsize.x - 30)
-		y := rand.float32() * (windowsize.y - 30)
-		ha_add(&entities, Entity{
-			position = {x, y},
-			color = rl.WHITE
-		})
-	}
+	regen_entities(&entities)
 
 	selected_handle: EntityHandle
-
 
 	for !rl.WindowShouldClose() {
 
@@ -96,15 +101,7 @@ main :: proc() {
 			}
 
 			if rl.IsKeyPressed(.R) {
-				ha_clear(&entities)
-				for i := 0; i < 50; i += 1 {
-					x := rand.float32() * (windowsize.x - size.x)
-					y := rand.float32() * (windowsize.y - 30)
-					ha_add(&entities, Entity{
-						position = {x, y},
-						color = rl.WHITE
-					})
-				}
+				regen_entities(&entities)
 			}
 
 
