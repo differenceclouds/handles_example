@@ -82,6 +82,7 @@ main :: proc() {
 						}
 					} else if !connecting && rl.IsMouseButtonPressed(.RIGHT) {
 						ha_remove(&entities, e.handle)
+						break // break out of loop here to avoid collisions. this type of thing could be avoided with a state machine
 					}
 				}
 				rl.DrawRectangleV(p, size, color)
@@ -91,7 +92,7 @@ main :: proc() {
 				if connected_to, ok := ha_get(entities, e.connected_to) ; ok {
 					rl.DrawLineV(p + size, connected_to.position, rl.GREEN)
 					rl.DrawCircleV(connected_to.position, 4, rl.RED)
-				} else if selected_handle == e.handle {
+				} else if selected_handle == e.handle && selected_handle != {} { // checking for empty handle here is unneccesary with break above
 					rl.DrawLineV(p + size, mouse_position, rl.GREEN)
 					connecting = true
 				}
