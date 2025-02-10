@@ -1,0 +1,35 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+		},
+		{
+			"path": "/Users/Radagast/Odin/core",
+		},
+		{
+			"path": "/Users/Radagast/Odin/vendor",
+		},
+	],
+	"build_systems":
+	[
+		{
+			"name": "sublime_odin_template",
+			"shell_cmd": "~/Odin/odin run $project_path",
+			"file_regex": "^(.+)\\(([0-9]+):([0-9]+)\\) (.+)$"	//jump to error 
+		}
+	],
+	"settings":
+	{
+		"LSP":
+		{
+			"odin":
+			{
+				"enabled": true,
+			},
+		},
+	},
+	"debugger_configurations":
+	[
+	],
+}
