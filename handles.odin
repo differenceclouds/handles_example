@@ -95,6 +95,7 @@ ha_get_ptr :: proc(ha: Handle_Array($T, $HT), h: HT) -> ^T {
 }
 
 
+
 ha_remove :: proc(ha: ^Handle_Array($T, $HT), h: HT) {
 	if h.idx > 0 && int(h.idx) < len(ha.items) && ha.items[h.idx].handle == h {
 		append(&ha.freelist, h)

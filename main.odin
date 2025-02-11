@@ -28,6 +28,15 @@ regen_entities :: proc(entities: ^Handle_Array($T, $HT)) {
 	}
 }
 
+randomize_connections :: proc(entities: Handle_Array($T, $HT)) {
+	ee := ha_make_iter(entities)
+	for e in ha_iter_ptr(&ee) {
+		// if rand.
+		r := rand.choice(entities.items[:])
+		e.connected_to = r.handle
+	}
+}
+
 
 
 main :: proc() {
@@ -38,6 +47,8 @@ main :: proc() {
 	entities: Handle_Array(Entity, EntityHandle)
 
 	regen_entities(&entities)
+	randomize_connections(entities)
+
 
 	selected_handle: EntityHandle
 	connecting: bool
@@ -111,11 +122,15 @@ main :: proc() {
 				selected_handle = {}
 			}
 
+			if rl.IsKeyPressed(.Q) {
+				randomize_connections(entities)
+			}
+
 
 			for m, i in debug_message {
 				rl.DrawText(m, 0, i32(i) * 10, 10, rl.YELLOW)
 			}
-			rl.DrawText("left click to connect or add entity, right click to remove, R to regen", 5, i32(windowsize.y) - 15, 10, rl.YELLOW)
+			rl.DrawText("left click to connect or add entity, right click to remove, R to regen, Q to randomize connections", 5, i32(windowsize.y) - 15, 10, rl.YELLOW)
 		rl.EndDrawing()
 	}
 }
